@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Fashion Store</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f8f8f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+
+    /* SALE BANNER */
+    .sale {
+      text-align: center;
+      background-color: #000;
+      color: white;
+      font-size: 100%;
+      padding: 10px;
+    }
+
+    /* HEADER + NAV */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      background-color: #ffffff;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* LOGO */
+    .logo {
+      flex: 1;
+    }
+
+    .logo img {
+      height: 40px;
+      margin-right: 30px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    .navbar li {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #333;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: #0073e6;
+      transform: translateY(-2px);
+    }
+
+    /* Mobile menu toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 21px;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      display: block;
+      height: 3px;
+      width: 100%;
+      background-color: #333;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    /* BANNER */
+    .banner {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .banner-text {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    /* PRODUCT CONTAINER */
+    .products-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 0 20px 50px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin: 20px 0 40px;
+      color: #333;
+      font-weight: 600;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 20px;
+    }
+
+    /* PRODUCT STYLES */
+    .product {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: white;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+      position: relative;
+      overflow: hidden;
+      height: 280px;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-image:hover img {
+      transform: scale(1.2);
+    }
+
+    .simple-zoom {
+      display: none;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product p {
+      margin: 8px 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .product .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #e63946;
+      margin: 10px 0;
+    }
+
+    .product button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0073e6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .product a {
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+
+    .product button:hover {
+      background-color: #005bb5;
+    }
+
+    .colors {
+      display: flex;
+      gap: 5px;
+      margin: 10px 0;
+    }
+
+    .color-option {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid #ddd;
+    }
+
+    /* PRODUCT DETAIL PAGE */
+    .product-detail {
+      max-width: 1200px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 0 20px;
+    }
+
+    .product-gallery {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 15px;
+    }
+
+    .thumbnail-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      object-fit: cover;
+    }
+
+    .thumbnail.active {
+      border-color: #0073e6;
+    }
+
+    .main-image-container {
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s ease-out;
+    }
+
+    .main-image-container:hover .main-image {
+      transform: scale(1.5);
+    }
+
+    .product-info-detail {
+      padding: 20px 0;
+    }
+
+    .product-info-detail h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .product-info-detail .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e63946;
+      margin: 15px 0;
+    }
+
+    .product-info-detail .description {
+      margin: 20px 0;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .size-selector {
+      margin: 20px 0;
+    }
+
+    .size-selector h3 {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .size-guide {
+      font-size: 0.8rem;
+      color: #0073e6;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: normal;
+    }
+
+    .sizes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .size {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .size.out-of-stock {
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .size.out-of-stock::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #aaa;
+      transform: rotate(-45deg);
+    }
+
+    .size:hover:not(.out-of-stock), .size.active {
+      background-color: #0073e6;
+      color: white;
+      border-color: #0073e6;
+    }
+
+    .size-chart-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .size-chart {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .size-chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .size-chart-close {
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .size-chart table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .size-chart th, .size-chart td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .size-chart th {
+      background-color: #f8f8f8;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      padding: 15px;
+      background-color: #0073e6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 30px;
+    }
+
+    .add-to-cart:hover {
+      background-color: #005bb5;
+    }
+
+    .product-meta {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .product-meta p {
+      margin: 5px 0;
+      color: #666;
+    }
+
+    /* Hide product detail by default */
+    #product-detail-page {
+      display: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+      }
+
+      .logo {
+        margin-bottom: 0;
+        width: auto;
+        flex: 0;
+      }
+
+      .logo img {
+        height: 30px;
+        margin-right: 0;
+      }
+
+      .menu-toggle {
+        display: flex;
+        z-index: 1001;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: white;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        gap: 20px;
+        z-index: 1000;
+      }
+
+      .navbar.active {
+        transform: translateX(0);
+      }
+
+      .navbar li {
+        font-size: 20px;
+      }
+
+      .banner {
+        margin-bottom: 20px;
+        height: 50vh;
+        max-height: 300px;
+      }
+
+      .banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .banner-text {
+        font-size: 24px;
+        bottom: 20px;
+        padding: 0 10px;
+      }
+
+      .product-detail {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .product-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .thumbnail-container {
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: center;
+        padding-bottom: 10px;
+      }
+
+      .main-image-container:hover .main-image {
+        transform: scale(1.2);
+      }
+
+      .product-image:hover img {
+        transform: scale(1.1);
+      }
+
+      .product-info-detail h1 {
+        font-size: 1.5rem;
+      }
+
+      .size {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products-container {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 15px;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+
+    .footer-section a {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    .footer-section a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #555;
+    }
+
+    /* Product size variant styles */
+    .size-variant-preview {
+      display: none;
+    }
+
+    .small-fit-guide {
+      display: none;
+    }
+
+    .model-info {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Add CSS for the product thumbnails */
+    .product-thumbnails {
+      display: flex;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      gap: 5px;
+      z-index: 10;
+    }
+
+    .product-thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .product-thumbnail:hover {
+      border-color: #0073e6;
+      transform: scale(1.1);
+    }
+
+    .product-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Add view labels to product thumbnails */
+    .product-view-label {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      z-index: 5;
+    }
+
+    .view-indicator {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <img src="Untitled.png" alt="logo">
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul class="navbar" id="mobileMenu">
+      <li><a href="#" onclick="showHomePage()">Home</a></li>
+      <li><a href="#">Men</a></li>
+      <li><a href="#">Women</a></li>
+      <li><a href="#">Accessories</a></li>
+      <li><a href="#">Sale</a></li>
+    </ul>
+  </div>
+
+  <div id="home-page">
+    <div class="banner">
+      <img src="https://lamaretail.com/cdn/shop/files/summer-blazers-for-men.jpg?v=1744870502&width=1920" alt="Banner">
+      <div class="banner-text">Summer Collection 2023</div>
+    </div>
+
+    <h2 class="section-title">Featured Products</h2>
+
+    <div class="products-container" id="products-grid">
+      <!-- Products will be generated by JavaScript -->
+    </div>
+  </div>
+
+  <div id="product-detail-page">
+    <div class="product-detail">
+      <div class="product-gallery">
+        <div class="thumbnail-container" id="thumbnails">
+          <!-- Thumbnails will be dynamically loaded -->
+        </div>
+        <div class="main-image-container">
+          <img src="https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540" alt="Product" class="main-image" id="main-product-image">
+        </div>
+      </div>
+      <div class="product-info-detail">
+        <h1 id="product-title">Product Title</h1>
+        <p class="price" id="product-price">$79.99</p>
+        <div class="colors">
+          <div class="color-option" style="background-color: #333333;"></div>
+          <div class="color-option" style="background-color: #6E7B8B;"></div>
+          <div class="color-option" style="background-color: #D2B48C;"></div>
+        </div>
+        <p class="description" id="product-description">
+          Detailed product description will appear here when a product is selected.
+          This premium quality item is designed for comfort and style.
+        </p>
+        
+        <div id="small-fit-guide" class="small-fit-guide"></div>
+        
+        <div class="size-selector">
+          <h3>
+            Select Size
+            <span class="size-guide" onclick="showSizeChart()">Size Guide</span>
+          </h3>
+          <div class="sizes">
+            <div class="size" onclick="selectSize('XXS', this)">XXS</div>
+            <div class="size" onclick="selectSize('XS', this)">XS</div>
+            <div class="size" onclick="selectSize('S', this)">S</div>
+            <div class="size" onclick="selectSize('M', this)">M</div>
+            <div class="size" onclick="selectSize('L', this)">L</div>
+            <div class="size" onclick="selectSize('XL', this)">XL</div>
+            <div class="size out-of-stock" onclick="notifyStock('XXL')">XXL</div>
+          </div>
+          <p id="size-message" class="size-message"></p>
+        </div>
+        
+        <button class="add-to-cart">Add to Cart</button>
+        <div class="product-meta">
+          <p>SKU: <span id="product-sku">MAS25TP069</span></p>
+          <p>Category: <span id="product-category">Men's Clothing</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Size Chart Modal -->
+  <div class="size-chart-container" id="sizeChartModal">
+    <div class="size-chart">
+      <div class="size-chart-header">
+        <h3>Size Chart</h3>
+        <span class="size-chart-close" onclick="closeSizeChart()">&times;</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Chest (inches)</th>
+            <th>Waist (inches)</th>
+            <th>Length (inches)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>XXS</td>
+            <td>32-34</td>
+            <td>26-28</td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td>XS</td>
+            <td>34-36</td>
+            <td>28-30</td>
+            <td>26</td>
+          </tr>
+          <tr>
+            <td>S</td>
+            <td>36-38</td>
+            <td>30-32</td>
+            <td>27</td>
+          </tr>
+          <tr>
+            <td>M</td>
+            <td>38-40</td>
+            <td>32-34</td>
+            <td>28</td>
+          </tr>
+          <tr>
+            <td>L</td>
+            <td>40-42</td>
+            <td>34-36</td>
+            <td>29</td>
+          </tr>
+          <tr>
+            <td>XL</td>
+            <td>42-44</td>
+            <td>36-38</td>
+            <td>30</td>
+          </tr>
+          <tr>
+            <td>XXL</td>
+            <td>44-46</td>
+            <td>38-40</td>
+            <td>31</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onclick="closeSizeChart()">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About Us</h3>
+        <p>Premier destination for high-quality fashion and accessories.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#">My Account</a></li>
+          <li><a href="#">Orders</a></li>
+          <li><a href="#">Wishlist</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Pinterest</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 Premium Fashion Store. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Create products array with only 8 products
+    const products = [
+      {
+        id: 1,
+        name: "Premium Jacquard Henley",
+        price: 79.99,
+        description: "Luxurious grey jacquard henley crafted from premium materials, perfect for both casual and semi-formal occasions.",
+        image: "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_1.jpg?v=1744807135&width=540",
+        images: [
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_1.jpg?v=1744807135&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_2.jpg?v=1744807135&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_3.jpg?v=1744807135&width=540"
+        ],
+        category: "Men's Clothing",
+        sku: "MAS25TP069"
+      },
+      {
+        id: 3,
+        name: "White Safari Shirt",
+        price: 89.99,
+        description: "Comfortable off-white safari shirt, suitable for outdoor adventures and casual gatherings.",
+        image: "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540",
+        images: [
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_21.jpg?v=1744806986&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_22.jpg?v=1744806986&width=540"
+        ],
+        category: "Men's Clothing",
+        sku: "MAS25TP019"
+      },
+      {
+        id: 1,
+        name: "Premium Jacquard Henley",
+        price: 79.99,
+        description: "Luxurious grey jacquard henley crafted from premium materials, perfect for both casual and semi-formal occasions.",
+        image: "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_1.jpg?v=1744807135&width=540",
+        images: [
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_1.jpg?v=1744807135&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_2.jpg?v=1744807135&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_3.jpg?v=1744807135&width=540"
+        ],
+        category: "Men's Clothing",
+        sku: "MAS25TP069"
+      },
+      {
+        id: 1,
+        name: "Premium Jacquard Henley",
+        price: 79.99,
+        description: "Luxurious grey jacquard henley crafted from premium materials, perfect for both casual and semi-formal occasions.",
+        image: "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_1.jpg?v=1744807135&width=540",
+        images: [
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_1.jpg?v=1744807135&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_2.jpg?v=1744807135&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP069-GREY-JACQUARD-HENLEY_3.jpg?v=1744807135&width=540"
+        ],
+        category: "Men's Clothing",
+        sku: "MAS25TP069"
+      },
+      {
+        id: 3,
+        name: "White Safari Shirt",
+        price: 89.99,
+        description: "Comfortable off-white safari shirt, suitable for outdoor adventures and casual gatherings.",
+        image: "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540",
+        images: [
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_21.jpg?v=1744806986&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_22.jpg?v=1744806986&width=540"
+        ],
+        category: "Men's Clothing",
+        sku: "MAS25TP019"
+      },
+      {
+        id: 3,
+        name: "White Safari Shirt",
+        price: 89.99,
+        description: "Comfortable off-white safari shirt, suitable for outdoor adventures and casual gatherings.",
+        image: "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540",
+        images: [
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_20.jpg?v=1744806986&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_21.jpg?v=1744806986&width=540",
+          "https://lamaretail.com/cdn/shop/files/MAS25TP019-OFF-WHITE-LANDSCAPE-SAFARI-SHIRT-e9e8e4_22.jpg?v=1744806986&width=540"
+        ],
+        category: "Men's Clothing",
+        sku: "MAS25TP019"
+      },
+    ];
+
+    // Function to generate product HTML with numbered view labels
+    function generateProductHTML(product) {
+      // Create a mini gallery for each product in the grid
+      const thumbnailHtml = product.images.slice(1).map((img, index) => 
+        `<div class="product-thumbnail" data-image="${img}" data-view="${index+2}">
+          <img src="${img}" alt="${product.name} view ${index+2}">
+         </div>`
+      ).join('');
+      
+      return `
+        <div class="product">
+          <a href="#" onclick="viewProductDetail(${product.id}); return false;">
+            <div class="product-image micro-zoom-container" data-image="${product.image}">
+              <div class="view-indicator">View 1</div>
+              <img src="${product.image}" alt="${product.name}" class="micro-zoom-image">
+              <div class="product-thumbnails">
+                ${thumbnailHtml}
+              </div>
+            </div>
+            <div class="product-info">
+              <h3>${product.name}</h3>
+              <p class="price">$${product.price.toFixed(2)}</p>
+              <button onclick="event.stopPropagation(); addToCart(${product.id})">Add to Cart</button>
+            </div>
+          </a>
+        </div>
+      `;
+    }
+
+    // Function to render products
+    function renderProducts() {
+      const productsGrid = document.getElementById('products-grid');
+      productsGrid.innerHTML = '';
+      
+      products.forEach(product => {
+        productsGrid.innerHTML += generateProductHTML(product);
+      });
+    }
+
+    // Function to view product detail with size-specific images
+    function viewProductDetail(productId) {
+      // Find the product
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      
+      // Update product detail page content
+      document.getElementById('product-title').textContent = product.name;
+      document.getElementById('product-price').textContent = `$${product.price.toFixed(2)}`;
+      document.getElementById('product-description').textContent = product.description;
+      document.getElementById('product-sku').textContent = product.sku;
+      document.getElementById('product-category').textContent = product.category;
+      
+      // Set default images
+      updateProductImages(product.images);
+      document.getElementById('main-product-image').src = product.images[0];
+      
+      // Reset any active size
+      document.querySelectorAll('.size').forEach(s => s.classList.remove('active'));
+      document.getElementById('size-message').textContent = '';
+      
+      // Show product detail page, hide home page
+      document.getElementById('home-page').style.display = 'none';
+      document.getElementById('product-detail-page').style.display = 'block';
+    }
+    
+    // Function to update product images based on selected size
+    function updateProductImages(images) {
+      // Generate thumbnails
+      const thumbnailsContainer = document.getElementById('thumbnails');
+      thumbnailsContainer.innerHTML = '';
+      
+      images.forEach((image, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = image;
+        thumbnail.alt = `Product view ${index+1}`;
+        thumbnail.className = 'thumbnail' + (index === 0 ? ' active' : '');
+        thumbnail.onclick = function() {
+          document.getElementById('main-product-image').src = image;
+          document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+          this.classList.add('active');
+        };
+        thumbnailsContainer.appendChild(thumbnail);
+      });
+      
+      // Set the main image to the first image
+      document.getElementById('main-product-image').src = images[0];
+    }
+
+    // Select size function with feedback and size-specific images
+    function selectSize(size, element) {
+      if (element.classList.contains('out-of-stock')) {
+        return;
+      }
+      
+      document.querySelectorAll('.size').forEach(el => {
+        el.classList.remove('active');
+      });
+      element.classList.add('active');
+      
+      const sizeMessage = document.getElementById('size-message');
+      sizeMessage.textContent = `Size ${size} selected`;
+      sizeMessage.style.color = '#4CAF50';
+      
+      // Store the selected size
+      selectedSize = size;
+    }
+    
+    // Helper function to get the currently active product
+    function getActiveProduct() {
+      // This assumes product ID is stored somewhere or can be derived
+      // For demonstration, we'll use a simple approach
+      const productTitle = document.getElementById('product-title').textContent;
+      return products.find(p => p.name === productTitle);
+    }
+
+    // Function to go back to home page
+    function showHomePage() {
+      document.getElementById('home-page').style.display = 'block';
+      document.getElementById('product-detail-page').style.display = 'none';
+    }
+
+    // Function to toggle mobile menu
+    function toggleMenu() {
+      const navbar = document.getElementById('mobileMenu');
+      navbar.classList.toggle('active');
+      
+      const toggleBtn = document.querySelector('.menu-toggle');
+      const spans = toggleBtn.querySelectorAll('span');
+      
+      if (navbar.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
+      } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+      }
+    }
+    
+    // Function to handle out-of-stock sizes
+    function notifyStock(size) {
+      const sizeMessage = document.getElementById('size-message');
+      sizeMessage.textContent = `Size ${size} is currently out of stock. We can notify you when it's back.`;
+      sizeMessage.style.color = '#e63946';
+    }
+    
+    // Function to show size chart
+    function showSizeChart() {
+      document.getElementById('sizeChartModal').style.display = 'flex';
+    }
+    
+    // Function to close size chart
+    function closeSizeChart() {
+      document.getElementById('sizeChartModal').style.display = 'none';
+    }
+    
+    // Function to update size feedback
+    function updateSizeFeedback(size) {
+      // This function could display additional information based on the selected size
+      // For example, model size information or fit recommendations
+      
+      let fitGuide = '';
+      
+      switch(size) {
+        case 'XXS':
+        case 'XS':
+          fitGuide = 'This size runs small. Perfect for petite builds.';
+          break;
+        case 'S':
+          fitGuide = 'Standard small size. Fits most slim builds.';
+          break;
+        case 'M':
+          fitGuide = 'Our most popular size. Standard fit.';
+          break;
+        case 'L':
+          fitGuide = 'Relaxed fit for comfort.';
+          break;
+        case 'XL':
+          fitGuide = 'Generous cut for a relaxed fit.';
+          break;
+        default:
+          fitGuide = '';
+      }
+      
+      if (fitGuide) {
+        const sizeMessage = document.getElementById('size-message');
+        sizeMessage.textContent += ` - ${fitGuide}`;
+      }
+    }
+    
+    // Close size chart when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('sizeChartModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Close menu when clicking a menu item
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuItems = document.querySelectorAll('.navbar a');
+      menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+          document.getElementById('mobileMenu').classList.remove('active');
+          const toggleBtn = document.querySelector('.menu-toggle');
+          const spans = toggleBtn.querySelectorAll('span');
+          spans[0].style.transform = 'none';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'none';
+        });
+      });
+      
+      // Initialize size selections
+      document.querySelectorAll('.size').forEach(size => {
+        size.addEventListener('click', function() {
+          document.querySelectorAll('.size').forEach(s => s.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Initialize color selector
+      document.querySelectorAll('.color-option').forEach(color => {
+        color.addEventListener('click', function() {
+          document.querySelectorAll('.color-option').forEach(c => c.style.border = '1px solid #ddd');
+          this.style.border = '2px solid #0073e6';
+        });
+      });
+      
+      // Initialize micro-zoom for product detail page
+      const mainImageContainer = document.querySelector('.main-image-container');
+      const mainImage = document.querySelector('.main-image');
+      
+      if (mainImageContainer && mainImage) {
+        mainImageContainer.addEventListener('mousemove', function(e) {
+          const containerRect = mainImageContainer.getBoundingClientRect();
+          const xPos = (e.clientX - containerRect.left) / containerRect.width;
+          const yPos = (e.clientY - containerRect.top) / containerRect.height;
+          
+          // Move the background position according to cursor
+          mainImage.style.transformOrigin = `${xPos * 100}% ${yPos * 100}%`;
+        });
+      }
+    });
+
+    // Add to cart function with size validation
+    function addToCart(productId) {
+      const selectedSize = document.querySelector('.size.active');
+      
+      if (!selectedSize && document.getElementById('product-detail-page').style.display === 'block') {
+        const sizeMessage = document.getElementById('size-message');
+        sizeMessage.textContent = 'Please select a size before adding to cart';
+        sizeMessage.style.color = '#e63946';
+        return;
+      }
+      
+      const size = selectedSize ? selectedSize.textContent : '';
+      
+      // Get product details
+      const product = products.find(p => p.id === productId);
+      if (product) {
+        alert(`Added to cart: ${product.name} (Size: ${size}) - $${product.price.toFixed(2)}`);
+      } else {
+        alert(`Product ${productId} (Size: ${size}) added to cart!`);
+      }
+    }
+
+    // Load products when page loads
+    window.onload = function() {
+      renderProducts();
+      
+      // Add micro-zoom functionality to all products
+      setTimeout(() => {
+        document.querySelectorAll('.product-image').forEach(container => {
+          const img = container.querySelector('.micro-zoom-image');
+          const viewIndicator = container.querySelector('.view-indicator');
+          
+          container.addEventListener('mousemove', function(e) {
+            const rect = container.getBoundingClientRect();
+            const xPos = (e.clientX - rect.left) / rect.width;
+            const yPos = (e.clientY - rect.top) / rect.height;
+            
+            // Set transform origin to cursor position for natural zoom
+            img.style.transformOrigin = `${xPos * 100}% ${yPos * 100}%`;
+          });
+          
+          // Add thumbnail click handlers with view indicator update
+          container.querySelectorAll('.product-thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              const newImageSrc = this.getAttribute('data-image');
+              const viewNumber = this.getAttribute('data-view');
+              img.src = newImageSrc;
+              viewIndicator.textContent = `View ${viewNumber}`;
+              container.setAttribute('data-image', newImageSrc);
+            });
+          });
+        });
+      }, 500);
+    };
+  </script>
+</body>
+</html>
+
